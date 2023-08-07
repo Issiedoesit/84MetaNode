@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sign-up-btn-gradient{
+    background: linear-gradient(180deg, rgba(247, 170, 53, 0.87) 8.33%, rgba(240, 50, 110, 0.31) 70.31%);
+}
+
+
+input[type="password"]::-ms-reveal{
+    display: none;
+}
