@@ -76,14 +76,14 @@ router.post("/login", async (req, res) => {
     try{
 
         if (!user){
-            res.status(400).json({status:400, message: "Account not found"})
+            res.status(200).json({status:404, message: "Account not found"})
         }else{
             let decryptedPassword = await bcrypt.compare(password, user.password)
             if(decryptedPassword){
                 const {createdAt, dob, updatedAt, firstname, lastname, username, email:userEmail, id:_id  } = user
                 res.status(200).json({status:200, message:"User logged in Successfully", token:token, user:[{id:_id, username, email:userEmail, firstname, lastname, createdAt, dob, updatedAt}]})
             }else{
-                res.status(400).json({status:400, message: "Invalid Credentials"})
+                res.status(200).json({status:400, message: "Invalid Credentials"})
             }
         }
 
@@ -103,7 +103,7 @@ router.put('/:id', async (req, res) => {
         )
         res.status(200).json({message: "Successfully updated user", user : updatedUser})
     }catch{
-        res.status(404).json({message: "User not found"});
+        res.status(404).json({message: "Something went wrong"});
     }
 })
 
