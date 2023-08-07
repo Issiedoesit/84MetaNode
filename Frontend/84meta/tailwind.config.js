@@ -35,7 +35,7 @@ export default {
         brandGray5x:"#EFEFEF",
         brandGray6x:"#9E9E9E",
         brandBlue1x:"#043187",
-        brandBlue2x:"#cddbf5",
+        brandBlue2x:"#CDDBF5",
         brandBlue3x:"#064ACB",
       },
       fontFamily: {

@@ -12,7 +12,7 @@ const DashNav = () => {
     useComponentVisible('#showProfile', "#profile", ()=>setShowProfile(false))
 
   return (
-    <nav className={`flex justify-between w-full gap-10 items-start`}>
+    <nav className={`flex justify-between w-full gap-10 items-start z-30`}>
         <input type="search" name="search" id="search" placeholder='Search file name, extension or folder' className={`text-sm border-0.25 md:min-w-[280px] border-brandGray3x placeholder:text-brandGray3x px-4 py-2 rounded-md`} />
         <ul className={`hidden lg:flex gap-20 text-lg`}>
             {NavData.map((item, idx) => {
@@ -25,7 +25,7 @@ const DashNav = () => {
             <button id={"showProfile"} type='button' onMouseOver={()=>setShowProfile(prevShowProfile => !prevShowProfile)} onClick={()=>setShowProfile(prevShowProfile => !prevShowProfile)}>
                 <img src={Avatar} alt="user" className={`w-10 aspect-square rounded-full`} />
             </button>
-            <div id={"profile"} className={`absolute ${showProfile ? "visible opacity-100" : "invisible opacity-0"} rounded-10 top-0 right-0 bg-brandGray5x drop-shadow-lg px-4 w-fit`}>
+            <div id={"profile"} className={`absolute z-30 ${showProfile ? "visible opacity-100" : "invisible opacity-0"} transition-all duration-500 ease-in-out shadow-lg flex flex-col rounded-10 top-0 right-0 bg-brandGray5x  px-4`}>
                 <div className='pt-4 pb-10 border-b-2 border-b-brandGray6x'>
                     <button type='button' onClick={()=>setShowProfile(prevShowProfile => !prevShowProfile)}>
                         <img src={Avatar} alt="user" className={`w-10 aspect-square rounded-full`} />

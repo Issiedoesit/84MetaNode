@@ -9,7 +9,7 @@ const DashSideBar = () => {
     const [sideOpen, setSideOpen] = useState(false)
 
   return (
-    <div className={`py-20 h-screen relative ${sideOpen ? "" : "w-16 md:w-28 overflow-hidden"} transition-all duration-1000 ease-in-out overflow-y-auto flex flex-col justify-center border-r border-r-brandGray2x`}>
+    <div className={`py-20 h-screen sticky top-0 left-0 ${sideOpen ? "" : "w-16 md:w-28 overflow-hidden"} transition-all duration-1000 ease-in-out overflow-y-auto flex flex-col justify-center border-r border-r-brandGray2x`}>
         <NavLink>
             <img src={Logo} alt="84 Meta Logo" className={`w-14 md:w-24`} />
         </NavLink>

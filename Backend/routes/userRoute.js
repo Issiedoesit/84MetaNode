@@ -71,6 +71,12 @@ router.post("/login", async (req, res) => {
 
     const token = generateAccessToken(email)
     // console.log(token);
+
+    const updatedUser = await Users.findByIdAndUpdate(
+        user.id,
+        { lastLogin: Date.now() },
+        { new: true }
+    );
     
 
     try{
@@ -80,8 +86,8 @@ router.post("/login", async (req, res) => {
         }else{
             let decryptedPassword = await bcrypt.compare(password, user.password)
             if(decryptedPassword){
-                const {createdAt, dob, updatedAt, firstname, lastname, username, email:userEmail, id:_id  } = user
-                res.status(200).json({status:200, message:"User logged in Successfully", token:token, user:[{id:_id, username, email:userEmail, firstname, lastname, createdAt, dob, updatedAt}]})
+                const {createdAt, dob, updatedAt, firstname, lastname, username, email:userEmail, id:_id, lastLogin  } = updatedUser
+                res.status(200).json({status:200, message:"User logged in Successfully", token:token, user:[{id:_id, username, email:userEmail, firstname, lastname, createdAt, dob, updatedAt, lastLogin}]})
             }else{
                 res.status(200).json({status:400, message: "Invalid Credentials"})
             }
