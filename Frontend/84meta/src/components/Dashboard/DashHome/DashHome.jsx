@@ -3,15 +3,54 @@ import DashTemplate from '../Widgets/Wraps/DashTemplate'
 import {useDropzone} from 'react-dropzone'
 import {HiOutlineUpload} from "react-icons/hi"
 import DashTable from './DashTableLayout/DashTable'
+import Alert from '../../Widgets/Alerts/Alert'
+import axios from "axios"
 
 const DashHome = () => {
 
   const [fileInput, setFileInput] = useState(null)
+
+  const [submitting, setSubmitting] = useState(false)
+
+  const [openAlert, setOpenAlert] = useState(false)
+  const [alertValues, setAlertValues] = useState({
+    message:"",
+    type:'warning',
+    duration:2500
+  })
+
   const onDrop = useCallback(acceptedFiles => {
     console.log(acceptedFiles)
     setFileInput(acceptedFiles)
   }, [])
+
+
+
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
+  const handleExtract = () => {
+    setSubmitting(true)
+    setOpenAlert(false)
+
+    try {
+        axios.get(`${import.meta.env.VITE_BASEURL}metadata/extract`)
+        .then((res)=>{
+
+            console.log("metadata response =>", res);
+            setAlertValues({...alertValues, message:res.data.message, type:res.data.status.toString().charAt(0) == 2 ? 'auth' : 'danger' })
+            setOpenAlert(true)
+            setSubmitting(false)
+        })
+        .catch((err)=>{
+            setSubmitting(false)
+            console.error('axios error => ', err);
+        })
+    } catch (error) {
+        setSubmitting(false)
+        console.error('try catch error => ', error);
+    }
+
+}
 
   return (
     <DashTemplate>
@@ -68,9 +107,10 @@ const DashHome = () => {
             </div>
         </div>
 
-        <div className={`grid overflow-x-auto w-full py-10 bg-red-500`}>
-          <DashTable />
-        </div>
+        <DashTable />
+
+        <Alert open={openAlert} type={alertValues.type} message={alertValues.message} duration={alertValues.duration}  />
+
     </DashTemplate>
   )
 }

@@ -11,16 +11,16 @@ const generateAccessToken = (email) => {
     return jwt.sign(email, process.env.TOKEN_SECRET);
 }
 
-// router.get("/", async (req, res)=>{
-//     const allUsers = await Users.find().sort({
-//         createdAt: 'desc'
-//     })
-//     try{
-//         res.status(200).json({status:200, message:"Fetched all users successfully", users: allUsers})
-//     }catch (err){
-//         res.status(500).json({status:500, message:"Something went wrong"})
-//     }
-// })
+router.get("/", async (req, res)=>{
+    const allUsers = await Users.find().sort({
+        createdAt: 'desc'
+    })
+    try{
+        res.status(200).json({status:200, message:"Fetched all users successfully", users: allUsers})
+    }catch (err){
+        res.status(500).json({status:500, message:"Something went wrong"})
+    }
+})
 
 router.get("/:id", async (req, res)=>{
     const user = await Users.findById(req.params.id)

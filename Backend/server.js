@@ -27,8 +27,8 @@ try {
 app.use(express.json())
 app.use(cors())
 
-app.use("/api/v1/metadata/extract", extractRouter)
-app.use("/api/v1/metadata/users", userRouter)
+app.use("/api/v1/metadata", extractRouter)
+app.use("/api/v1/users", userRouter)
 
 
 
