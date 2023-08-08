@@ -4,6 +4,7 @@ import useComponentVisible from '../../../../utils/hooks/useHideOnClickOutside'
 import CsvDownloader from 'react-csv-downloader';
 import slugify from "react-slugify"
 import useFlat from '../../../../utils/hooks/useFlat';
+import CopyButtonWithText from "../../../Widgets/Buttons/CopyButtonWithText"
 
 const DashRow = ({index, id, name, size, folder, date, status, rowData}) => {
 
@@ -32,7 +33,7 @@ const DashRow = ({index, id, name, size, folder, date, status, rowData}) => {
         <td className={`px-4 py-4 whitespace-nowrap`}>{size}</td>
         <td className={`px-4 py-4 whitespace-nowrap`}>{folder} folder</td>
         <td className={`px-4 py-4 whitespace-nowrap`}>{date}</td>
-        <td className={`px-4 py-2 whitespace-nowrap flex items-center justify-center`}>
+        <td className={`px-4 pt-4 whitespace-nowrap flex items-center justify-center`}>
           {status == 'saved' && <p className={`bg-green-400 rounded-sm text-white capitalize text-sm px-2 w-fit py-1`}>{status}</p>}
           {status == 'not saved' && <p className={`bg-yellow-400 rounded-sm text-white capitalize text-sm px-2 w-fit py-1`}>{status}</p>}
           {status == 'trashed' && <p className={`bg-red-400 rounded-sm text-white capitalize text-sm px-2 w-fit py-1`}>{status}</p>}
@@ -41,19 +42,20 @@ const DashRow = ({index, id, name, size, folder, date, status, rowData}) => {
             <button onClick={()=>setShowMenu(prevShowMenu => !prevShowMenu)} id={`#showMenu${id}`} type={`button`} className={``}>
                 ...
             </button>
-            <div id={`#menu${id}`} className={`absolute text-sm z-30 ${showMenu ? "visible opacity-100" : "invisible opacity-0 h-0 overflow-hidden py-2"} transition-all duration-500 ease-in-out shadow-lg flex flex-col gap-4 rounded-10 ${index == 0 ? "top-80%" : "bottom-50%"} right-0 bg-brandGray5x px-4`}>
-                <button type='button' onClick={()=>alert(`Share ${id}`)}>Share</button>
-                <button type='button'>Copy</button>
-                <button type='button'>Export</button>
+            <div id={`#menu${id}`} className={`absolute text-left text-sm z-30 ${showMenu ? "visible opacity-100" : "invisible opacity-0 h-0 overflow-hidden py-2"} transition-all duration-500 ease-in-out shadow-lg flex flex-col gap-4 rounded-10 ${index == 0 ? "top-80%" : "bottom-50%"} right-0 bg-brandGray5x px-4`}>
+                <button className={`text-left`} type='button' onClick={()=>alert(`Share ${id}`)}>Share</button>
+                <CopyButtonWithText text={JSON.stringify(data)} />
+                <button className={`text-left`}  type='button'>Export</button>
                 <CsvDownloader title={`${slugify(rowData.originalName)}.csv`} text="Download CSV" datas={data} filename={slugify(rowData.originalName)}         
                 extension=".csv"
                 separator=";"
                 wrapColumnChar="'" 
                 // columns={columns}
+                className={`text-left`} 
                 suffix
                 meta
                 />
-                <button type='button'>Download File</button>
+                <button className={`text-left`}  type='button'>Download File</button>
             </div>
         </td>
     </tr>
