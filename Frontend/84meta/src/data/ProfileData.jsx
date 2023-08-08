@@ -13,10 +13,6 @@ const ProfileData = [
     {
         name:"Support",
         link:"/support"
-    },
-    {
-        name:"Logout",
-        link:"/logout"
     }
 ]
 

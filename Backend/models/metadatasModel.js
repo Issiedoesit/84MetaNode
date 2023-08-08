@@ -4,7 +4,7 @@ const metadataSchema = new mongoose.Schema({
     userID:{
         type:String,
         required:true,
-        default: "64d04f69803d64395abc7915"
+        default: "nouser"
     },
     fileName:{
         type:String,
@@ -17,6 +17,9 @@ const metadataSchema = new mongoose.Schema({
     size:{
         type:Number
     },
+    mime:{
+        type:String
+    },
     information:{
         type:Object
     },
@@ -24,8 +27,8 @@ const metadataSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: "not saved"
-    }
-},{timestamps:true});
+    },
+},{timestamps: { createdAt: 'metadataCreatedAt', updatedAt: 'metadataUpdatedAt' }});
 
 
 module.exports = mongoose.model('Metadatas', metadataSchema);

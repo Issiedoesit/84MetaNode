@@ -4,10 +4,8 @@ import axios from "axios"
 import useSWR from "swr"
 import formatDate from "../../../../utils/FormatDate"
 import DashTableSkeleton from './DashTableSkeleton'
-const DashTable = () => {
+const DashTable = ({data:metadata, error, mutate}) => {
 
-    const fetcher = async (url) => axios.get(url)
-    const {data:metadata, error, mutate} = useSWR(`${import.meta.env.VITE_BASEURL}metadata/nouser`, fetcher)
 
     // metadata && console.log("Metadata => ", metadata)
     
@@ -26,7 +24,7 @@ const DashTable = () => {
             </thead>
             <tbody>
                 {metadata && metadata.data.metas.length > 0 && metadata.data.metas.map((data, idx)=>{
-                    return <DashRow index={idx} rowData={metadata.data.metas[idx]} id={data.id} name={data.fileName} size={data.size} folder={data.folder} date={formatDate(data.createdAt)} status={data.status} />
+                    return <DashRow key={idx} index={idx} rowData={metadata.data.metas[idx]} id={data.id} name={data.originalName} size={data.size} folder={data.folder} date={formatDate(data.metadataCreatedAt)} status={data.status} />
                 })}
             </tbody>
         </table> 

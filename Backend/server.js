@@ -3,6 +3,7 @@ const express = require("express")
 const mongoose = require("mongoose")
 const app = express()
 const cors = require('cors');
+const bodyParser = require("body-parser")
 
 
 const extractRouter = require('./routes/extractRoute')
@@ -23,6 +24,8 @@ try {
 } catch (error) {
     console.error(error);
 }
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json())
 app.use(cors())
