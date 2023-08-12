@@ -10,7 +10,7 @@ const DashSideBar = () => {
 
   return (
     <div className={`py-20 h-screen sticky top-0 left-0 ${sideOpen ? "" : "w-16 md:w-28 overflow-hidden"} transition-all duration-1000 ease-in-out overflow-y-auto flex flex-col justify-center border-r border-r-brandGray2x`}>
-        <NavLink>
+        <NavLink to={'/dashboard'}>
             <img src={Logo} alt="84 Meta Logo" className={`w-14 md:w-24`} />
         </NavLink>
         <button type='button' onClick={()=>setSideOpen(prevSideOpen => !prevSideOpen)}  className={`absolute shadow-lg transition-all duration-1000 ease-in-out top-40 lg:top-64 right-2 bg-brandBlue2x aspect-square px-1 flex items-center justify-center ring-0.5 ring-offset-1 ring-offset-brandWhite1x rounded-full`}>

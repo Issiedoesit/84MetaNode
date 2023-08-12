@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import {useLocation} from "react-router-dom"
+import {Navigate, useLocation} from "react-router-dom"
 import DashTemplate from '../Widgets/Wraps/DashTemplate';
 import useSWR from "swr"
 import axios from "axios"
 import useUser from '../../../utils/useUser';
 import DashTable from '../DashHome/DashTableLayout/DashTable';
 import Alert from '../../Widgets/Alerts/Alert';
+import ErrorPage from "../../Error/ErrorPage"
 
 const FileType = () => {
 
@@ -21,6 +22,10 @@ const FileType = () => {
 
     // Get the value of the 'type' parameter
     const type = searchParams.get('type');
+
+    // if(type == "") return <Navigate to={''} />
+    // console.log(type)
+    if(!type) return <ErrorPage />
 
     const {token, userData, user} = useUser()
 

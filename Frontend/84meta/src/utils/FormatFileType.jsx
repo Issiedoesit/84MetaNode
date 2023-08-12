@@ -10,6 +10,8 @@ const FormatFileType = (mime) => {
         folder = "Audio"
     }else if (mime == ('video')){
         folder = "Video"
+    }else if (mime == ('text')){
+        folder = "Text"
     }else{
         folder = "Others"
     }

@@ -1,7 +1,7 @@
 import React from 'react'
 import {MdDashboard} from "react-icons/md"
-import {FaRegImages, FaFileCsv, FaRegFilePdf, FaFileAlt, FaFolderPlus, FaFileDownload, FaTrash, FaFileAudio, FaFileVideo} from "react-icons/fa"
-import {BiSolidFileJson} from "react-icons/bi"
+import {FaRegImages, FaFileCsv, FaRegFilePdf, FaFileAlt, FaFolderPlus,  FaFileDownload, FaTrash, FaFileAudio, FaFileVideo} from "react-icons/fa"
+import {BiSolidFileJson, BiSolidFileTxt} from "react-icons/bi"
 
 const color = "#064ACB"
 const size="20px"
@@ -35,6 +35,11 @@ const SidebarData = [
                 name:"Document Files",
                 icon:<FaFileAlt color={color} size={size} className={`aspect-square min-w-[20px]`} />,
                 type:"application"
+            },
+            {
+                name:"Text Files",
+                icon:<BiSolidFileTxt color={color} size={size} className={`aspect-square min-w-[20px]`} />,
+                type:"text"
             },
             {
                 name:"Audio Files",
