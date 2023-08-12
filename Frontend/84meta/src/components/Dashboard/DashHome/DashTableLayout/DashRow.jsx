@@ -4,19 +4,23 @@ import useComponentVisible from '../../../../utils/hooks/useHideOnClickOutside'
 import CsvDownloader from 'react-csv-downloader';
 import slugify from "react-slugify"
 import useFlat from '../../../../utils/hooks/useFlat';
+import FormatSize from '../../../../utils/FormatSize';
 import CopyButtonWithText from "../../../Widgets/Buttons/CopyButtonWithText"
 import axios from "axios"
 import useUser from '../../../../utils/useUser';
 import { Link } from 'react-router-dom';
 import {BsBalloonHeart, BsBalloonHeartFill} from 'react-icons/bs'
+import FormatFileType from '../../../../utils/FormatFileType';
 
-const DashRow = ({index, id, name, size, folder, date, status, rowData, mutate, submitting, setSubmitting, openAlert, setOpenAlert, alertValues, setAlertValues}) => {
+const DashRow = ({index, id, name, size, mime, date, status, rowData, mutate, submitting, setSubmitting, openAlert, setOpenAlert, alertValues, setAlertValues}) => {
 
     const [showMenu, setShowMenu] = useState(false)
+    const [saving, setSaving] = useState(false)
 
     useComponentVisible(`#showMenu${id}`, `#menu${id}`, ()=>setShowMenu(false))
     const {flat} =  useFlat()
     const {token} = useUser()
+
 
     const columns = [{
         id: 'first',
@@ -68,29 +72,29 @@ const DashRow = ({index, id, name, size, folder, date, status, rowData, mutate, 
   }
 
   const saveMetadata = (id) => {
-    setSubmitting(true)
+    setSaving(true)
     setOpenAlert(false)
 
     const savedStatus = status == "saved" ? "not saved" : "saved"
 
-    console.log(savedStatus)
+    // console.log(savedStatus)
 
     try {
       axios.put(`${import.meta.env.VITE_BASEURL}metadata/save/${id}`, {status:savedStatus}, {headers:{Authorization: `Bearer ${token}`}})
       .then((res)=>{
 
-          console.log("save response =>", res);
+          // console.log("save response =>", res);
           setAlertValues({...alertValues, message:res.data.message, type:res.data.status.toString().charAt(0) == 2 ? 'auth' : 'danger' })
           setOpenAlert(true)
-          setSubmitting(false)
+          setSaving(false)
           mutate()
       })
       .catch((err)=>{
-          setSubmitting(false)
+          setSaving(false)
           console.error('axios error => ', err);
       })
     } catch (error) {
-        // setSubmitting(false)
+        setSaving(false)
         console.error('try catch error => ', error);
     }
   }
@@ -98,8 +102,8 @@ const DashRow = ({index, id, name, size, folder, date, status, rowData, mutate, 
   return (
     <tr id={id} className={`odd:bg-white even:bg-brandBlue2x py-4`}>
         <td className={`px-4 py-4 whitespace-nowrap`}>{name}</td>
-        <td className={`px-4 py-4 whitespace-nowrap`}>{size}</td>
-        <td className={`px-4 py-4 whitespace-nowrap`}>{folder} {id} folder</td>
+        <td className={`px-4 py-4 whitespace-nowrap`}>{FormatSize(size)}</td>
+        <td className={`px-4 py-4 whitespace-nowrap`}>{FormatFileType(mime)} folder</td>
         <td className={`px-4 py-4 whitespace-nowrap`}>{date}</td>
         <td className={`px-4 pt-4 whitespace-nowrap flex items-center justify-center`}>
           {status == 'saved' && <p className={`bg-green-400 rounded-sm text-white capitalize text-sm px-2 w-fit py-1`}>{status}</p>}
@@ -107,9 +111,9 @@ const DashRow = ({index, id, name, size, folder, date, status, rowData, mutate, 
           {status == 'trashed' && <p className={`bg-red-400 rounded-sm text-white capitalize text-sm px-2 w-fit py-1`}>{status}</p>}
         </td>
         <td className={`px-4 py-4 whitespace-nowrap relative`}>
-          <button onClick={()=>saveMetadata(id)} className="relative">
-            <BsBalloonHeartFill color={'#FF0000'} className={`absolute ${status == 'not saved' ? "invisible" : ""} transition-all duration-300 ease-in-out`} />
-            <BsBalloonHeart color={'#FF0000'} className={`${status == 'saved' ? "invisible" : ""} transition-all duration-300 ease-in-out`} />
+          <button disabled={saving} onClick={()=>saveMetadata(id)} className="relative">
+            <BsBalloonHeartFill color={saving ? "#767676" : '#FF0000'} className={`absolute ${status == 'not saved' ? "invisible" : ""} transition-all duration-300 ease-in-out`} />
+            <BsBalloonHeart color={saving ? "#767676" : '#FF0000'} className={`${status == 'saved' ? "invisible" : ""} transition-all duration-300 ease-in-out`} />
           </button>
         </td>
         <td className={`px-4 py-4 relative whitespace-nowrap text-3xl text-brandBlue1x`}>

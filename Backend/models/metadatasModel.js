@@ -20,6 +20,12 @@ const metadataSchema = new mongoose.Schema({
     mime:{
         type:String
     },
+    primaryType:{
+        type:String
+    },
+    specificFile:{
+        type:String
+    },
     information:{
         type:Object
     },

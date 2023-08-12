@@ -1,6 +1,6 @@
 import React from 'react'
 import {MdDashboard} from "react-icons/md"
-import {FaRegImages, FaFileCsv, FaRegFilePdf, FaFolderPlus, FaFileDownload, FaTrash} from "react-icons/fa"
+import {FaRegImages, FaFileCsv, FaRegFilePdf, FaFileAlt, FaFolderPlus, FaFileDownload, FaTrash, FaFileAudio, FaFileVideo} from "react-icons/fa"
 import {BiSolidFileJson} from "react-icons/bi"
 
 const color = "#064ACB"
@@ -12,20 +12,39 @@ const SidebarData = [
         icon:<MdDashboard color={color} size={size} className={`aspect-square min-w-[20px]`} />,
         sub:[
             {
-                name:"Images",
-                icon:<FaRegImages color={color} size={size} className={`aspect-square min-w-[20px]`} />
+                name:"Image Files",
+                icon:<FaRegImages color={color} size={size} className={`aspect-square min-w-[20px]`} />,
+                type:"image"
+            },
+            // {
+            //     name:"JSON Files",
+            //     icon:<BiSolidFileJson color={color} size={size} className={`aspect-square min-w-[20px]`} />,
+            //     type:"json"
+            // },
+            // {
+            //     name:"CSV Files",
+            //     icon:<FaFileCsv color={color} size={size} className={`aspect-square min-w-[20px]`} />,
+            //     type:"csv"
+            // },
+            // {
+            //     name:"PDF Files",
+            //     icon:<FaRegFilePdf color={color} size={size} className={`aspect-square min-w-[20px]`} />,
+            //     type:"pdf"
+            // },
+            {
+                name:"Document Files",
+                icon:<FaFileAlt color={color} size={size} className={`aspect-square min-w-[20px]`} />,
+                type:"application"
             },
             {
-                name:"JSON Files",
-                icon:<BiSolidFileJson color={color} size={size} className={`aspect-square min-w-[20px]`} />
+                name:"Audio Files",
+                icon:<FaFileAudio color={color} size={size} className={`aspect-square min-w-[20px]`} />,
+                type:"audio"
             },
             {
-                name:"CSV Files",
-                icon:<FaFileCsv color={color} size={size} className={`aspect-square min-w-[20px]`} />
-            },
-            {
-                name:"PDF Files",
-                icon:<FaRegFilePdf color={color} size={size} className={`aspect-square min-w-[20px]`} />
+                name:"Video Files",
+                icon:<FaFileVideo color={color} size={size} className={`aspect-square min-w-[20px]`} />,
+                type:"video"
             },
         ]
     },

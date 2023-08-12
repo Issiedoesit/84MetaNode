@@ -13,7 +13,7 @@ const upload = multer({ dest: './uploads' })
 
 const router = express.Router()
 
-router.get('/:userID', async (req, res) => {
+router.get('/:userID', authenticateToken, async (req, res) => {
 
   const userID = req.params.userID
 
@@ -29,7 +29,56 @@ router.get('/:userID', async (req, res) => {
     res.status(404).json({status:404, message:"Something went wrong", error:err})
   }
 
-  // console.log(metas)
+})
+
+
+router.get('/saved/:userID', authenticateToken, async (req, res) => {
+
+  const userID = req.params.userID
+
+  const savedMetas = await Metadatas.find({userID}).where("status").equals("saved").sort({metadataCreatedAt:-1})
+
+  // console.log(savedMetas)
+
+  try{
+    if(savedMetas){
+      res.status(200).json({status:200, message:"Fetched saved Successfully", metas:savedMetas})
+    }else{
+      res.status(200).json({status:200, message:"No saved metadata for this user", metas:savedMetas})
+    }
+  }catch(err){
+    res.status(404).json({status:404, message:"Something went wrong", error:err})
+  }
+
+})
+
+
+router.get('/files/:type/:userID', authenticateToken, async (req, res) => {
+
+  const userID = req.params.userID
+  const type = req.params.type
+  // console.log(type)
+
+  const sortedMetas = await Metadatas
+  .find({ userID})
+  .or([
+    { primaryType: type },
+    { specificFile: type }
+  ])
+  .sort({metadataCreatedAt:-1})
+
+  // console.log(sortedMetas)
+
+  try{
+    if(sortedMetas){
+      res.status(200).json({status:200, message:`Fetched file type (${type}) Successfully`, metas:sortedMetas})
+    }else{
+      res.status(200).json({status:200, message:`No file type (${type}) metadata for this user`, metas:sortedMetas})
+    }
+  }catch(err){
+    res.status(404).json({status:404, message:"Something went wrong", error:err})
+  }
+
 })
 
 router.put('/save/:id', async (req, res) => {
@@ -81,18 +130,6 @@ router.get('/download/:id', async (req, res) => {
     }
   });
 
-
-  // try{
-  //   if(metas){
-  //     res.status(200).json({status:200, message:"Fetched Successfully", metas:metas})
-  //   }else{
-  //     res.status(200).json({status:200, message:"No metadata for this user", metas:metas})
-  //   }
-  // }catch(err){
-  //   res.status(404).json({status:404, message:"Something went wrong", error:err})
-  // }
-
-  // console.log(metas)
 })
 
 router.post('/extract', authenticateToken, upload.single('file'), metaDataController.createMetaData);

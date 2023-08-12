@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react'
+import React, {useState, useCallback, useEffect, useRef} from 'react'
 import DashTemplate from '../Widgets/Wraps/DashTemplate'
 import {useDropzone} from 'react-dropzone'
 import {HiOutlineUpload} from "react-icons/hi"
@@ -24,16 +24,22 @@ const DashHome = () => {
     duration:2500
   })
 
+  const fileInputContainerRef = useRef(null)
+
   const {token, userData, user} = useUser()
   
   const [metadata, setMetadata] = useState([])
 
+  useEffect(()=>{
+    document.getElementById("fileInputContainer")?.scrollIntoView({ behavior: 'smooth'})
+  }, [fileInput])
+
   const onDrop = useCallback(acceptedFiles => {
-    console.log(acceptedFiles[0])
+    // console.log(acceptedFiles[0])
     setFileInput(acceptedFiles[0])
   }, [])
 
-  const fetcher = async (url) => axios.get(url)
+  const fetcher = async (url) => axios.get(url, {headers:{Authorization: `Bearer ${token}`}})
   const {data, error, mutate} = useSWR(`${import.meta.env.VITE_BASEURL}metadata/${user.length > 0 && userData[0]?.id}`, fetcher)
 
   const getMetadata = (e) => {
@@ -44,18 +50,18 @@ const DashHome = () => {
 
     // console.log(fileInput);
     
-        setUploading(true)
+    setUploading(true)
     setOpenAlert(false)
 
     try {
         axios.post(`${import.meta.env.VITE_BASEURL}metadata/extract`, formData, {headers:{Authorization: `Bearer ${token}`}})
         .then((res)=>{
 
-            console.log("metadata response =>", res);
+            // console.log("metadata response =>", res);
             setAlertValues({...alertValues, message:res.data.message, type:res.data.status.toString().charAt(0) == 2 ? 'auth' : 'danger' })
             setOpenAlert(true)
             setUploading(false)
-            console.log(res.data.metadata)
+            // console.log(res.data.metadata)
             setMetadata(res.data.metadata)
             mutate()
             setFileInput()
@@ -71,10 +77,12 @@ const DashHome = () => {
   }
 
 
+  // data && console.log(data)
+
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
-const {flat} =  useFlat()
+  const {flat} =  useFlat()
 
   return (
     <DashTemplate>
@@ -133,7 +141,7 @@ const {flat} =  useFlat()
         </div>
 
         {/* show input */}
-        {fileInput && <div className=" border border-brandBlue1x p-4 rounded-2xl flex flex-row gap-4 justify-center w-full">
+        {fileInput && <div ref={fileInputContainerRef} id={"fileInputContainer"} className=" border border-brandBlue1x p-4 rounded-2xl flex flex-row items-center gap-4 justify-center w-full">
           <div className={`w-full`}>
             {fileInput.name}
           </div>

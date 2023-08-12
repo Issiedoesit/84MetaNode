@@ -21,7 +21,7 @@ const DashSideBar = () => {
                 if(data.sub && data.sub.length > 0){
                     return <DashCollapsible key={idx} data={data} sideOpen={sideOpen} />
                 }else{
-                    return <NavLink className={`flex items-center gap-3`}>
+                    return <NavLink to={data.link} className={`flex items-center gap-3`}>
                     {data.icon}
                     <p className={`${sideOpen ? "visible overflow-visible w-auto h-auto opacity-100" : "invisible overflow-hidden w-0 h-0 opacity-0"} whitespace-nowrap transition-all duration-500 ease-in-out`}>{data.name}</p>
                 </NavLink>
