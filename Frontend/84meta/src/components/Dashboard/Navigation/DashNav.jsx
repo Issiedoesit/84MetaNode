@@ -17,7 +17,7 @@ const DashNav = () => {
 
   return (
     <nav className={`flex justify-end md:justify-between w-full gap-5 md:gap-10 flex-wrap md:flex-nowrap items-start z-30`}>
-        <input type="search" name="search" id="search" placeholder='Search file name, extension or folder' className={`order-1 md:order-none w-full text-sm border-0.25 md:min-w-[280px] border-brandGray3x placeholder:text-brandGray3x px-4 py-2 rounded-md`} />
+        <input type="search" name="search" id="search" placeholder='Search file name, extension or folder' className={`order-1 md:order-none w-full md:w-auto text-sm border-0.25 md:min-w-[280px] border-brandGray3x placeholder:text-brandGray3x px-4 py-2 rounded-md`} />
         <div className={`relative`}>
             <ul id={''} className={`hidden lg:static lg:flex gap-20 text-lg`}>
                 {NavData.map((item, idx) => {
