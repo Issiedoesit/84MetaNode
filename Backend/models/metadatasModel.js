@@ -28,6 +28,10 @@ const metadataSchema = new mongoose.Schema({
         required: true,
         default: "not saved"
     },
+    file: {
+        type: Object,
+        required: true,
+    },
 },{timestamps: { createdAt: 'metadataCreatedAt', updatedAt: 'metadataUpdatedAt' }});
 
 

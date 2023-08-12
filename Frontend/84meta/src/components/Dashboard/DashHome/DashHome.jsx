@@ -8,12 +8,14 @@ import axios from "axios"
 import useSWR from 'swr'
 import useFlat from '../../../utils/hooks/useFlat'
 import useUser from '../../../utils/useUser'
+import { PulseLoader } from 'react-spinners'
 
 const DashHome = () => {
 
   const [fileInput, setFileInput] = useState(null)
 
   const [submitting, setSubmitting] = useState(false)
+  const [uploading, setUploading] = useState(false)
 
   const [openAlert, setOpenAlert] = useState(false)
   const [alertValues, setAlertValues] = useState({
@@ -42,7 +44,7 @@ const DashHome = () => {
 
     // console.log(fileInput);
     
-        setSubmitting(true)
+        setUploading(true)
     setOpenAlert(false)
 
     try {
@@ -52,18 +54,18 @@ const DashHome = () => {
             console.log("metadata response =>", res);
             setAlertValues({...alertValues, message:res.data.message, type:res.data.status.toString().charAt(0) == 2 ? 'auth' : 'danger' })
             setOpenAlert(true)
-            setSubmitting(false)
+            setUploading(false)
             console.log(res.data.metadata)
             setMetadata(res.data.metadata)
             mutate()
             setFileInput()
         })
         .catch((err)=>{
-            setSubmitting(false)
+            setUploading(false)
             console.error('axios error => ', err);
         })
     } catch (error) {
-        setSubmitting(false)
+      setUploading(false)
         console.error('try catch error => ', error);
     }
   }
@@ -76,7 +78,7 @@ const {flat} =  useFlat()
 
   return (
     <DashTemplate>
-        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 py-6 z-10 text-brandGray3x`}>
+        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 py-6 z-10 text-brandGray3x w-full overflow-x-hidden`}>
             <form method="post" encType="multipart/form-data" className={`max-h-80 w-full border-dashed border border-brandBlue1x  min-h-[320px] rounded-2xl flex flex-col items-center justify-center cursor-pointer`}>
               <div {...getRootProps({
                 className: `w-full h-full p-4 rounded-2xl`
@@ -135,14 +137,21 @@ const {flat} =  useFlat()
           <div className={`w-full`}>
             {fileInput.name}
           </div>
+          {uploading 
+          ?
+          <PulseLoader size={'10px'} color={'#043187'} />
+          :
           <div className={`flex flex-row gap-4`}>
             <button type="button" onClick={getMetadata} className={`bg-brandBlue1x text-white px-3 py-1 text-sm rounded-lg`}>Extract</button>
             <button type="button" onClick={()=>setFileInput(null)} className={`bg-red-500 text-white px-3 py-1 text-sm rounded-lg`}>Cancel</button>
           </div>
+          }
         </div>
         }
 
-        <DashTable data={data} error={error} mutate={mutate} />
+        <div className="grid w-full">
+        <DashTable data={data} error={error} mutate={mutate} submitting={submitting} setSubmitting={setSubmitting} openAlert={openAlert} setOpenAlert={setOpenAlert} alertValues={alertValues} setAlertValues={setAlertValues} />
+        </div>
 
         <Alert open={openAlert} type={alertValues.type} message={alertValues.message} duration={alertValues.duration}  />
 

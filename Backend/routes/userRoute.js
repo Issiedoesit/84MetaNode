@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
 const Users = require("../models/usersModel")
+const Metadatas = require("../models/metadatasModel")
 
 const router = express.Router()
 
@@ -69,14 +70,7 @@ router.post("/login", async (req, res) => {
 
     const user = await Users.findOne({email: email.toLowerCase()})
 
-    const token = generateAccessToken(email)
-    // console.log(token);
-
-    const updatedUser = await Users.findByIdAndUpdate(
-        user.id,
-        { lastLogin: Date.now() },
-        { new: true }
-    );
+   
     
 
     try{
@@ -84,6 +78,15 @@ router.post("/login", async (req, res) => {
         if (!user){
             res.status(200).json({status:404, message: "Account not found"})
         }else{
+            
+            const token = generateAccessToken(email)
+            // console.log(token);
+            const updatedUser = await Users.findByIdAndUpdate(
+                user.id,
+                { lastLogin: Date.now() },
+                { new: true }
+            );
+            const meta = await Metadatas.find({userID: user.id}).deleteMany({status:"not saved"})
             let decryptedPassword = await bcrypt.compare(password, user.password)
             if(decryptedPassword){
                 const {createdAt, dob, updatedAt, firstname, lastname, username, email:userEmail, id:_id, lastLogin  } = updatedUser

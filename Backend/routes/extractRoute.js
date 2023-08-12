@@ -32,6 +32,69 @@ router.get('/:userID', async (req, res) => {
   // console.log(metas)
 })
 
+router.put('/save/:id', async (req, res) => {
+
+  const id = req.params.id
+
+  // console.log(req.body)
+
+    try{
+      const updatedMetaData = await Metadatas.findByIdAndUpdate(
+          id,
+          req.body,
+          { new: true }
+      )
+        res.status(200).json({status:200, message: "Successfully updated metadata", metadata : updatedMetaData})
+    }catch(err){
+      res.status(404).json({status:404, message:"Something went wrong", error:err})
+    }
+
+})
+
+
+router.get('/download/:id', async (req, res) => {
+
+  const id = req.params.id
+
+  const metas = await Metadatas.findById(id)
+  let filename = metas.fileName
+  let originalName = path.parse(metas.originalName).name
+  console.log(filename);
+  console.log("download route")
+  const extension = path.extname(metas.originalName)
+  const file = `./uploads/${filename}`;
+  let newFile = ""
+  fs.copyFile(file, `./uploads/${originalName}${extension}`, (err) => {
+      if (err) throw err;
+      newFile = path.join(__dirname, '..', 'uploads', `${originalName}${extension}`)
+      // const newFile = `${__dirname}/uploads/${originalName}${extension}`
+      console.log(newFile)
+      // var data = JSON.parse(fs.readFileSync(newFile), 'utf8')
+      // res.end(JSON.stringify(data, null, 2), 'utf8')
+      console.log(`${file} was copied to ./uploads/${originalName}${extension}`);
+  });
+  // res.send(newFile);
+  res.download(newFile, (err) => {
+    if (err) {
+      // Handle error (e.g., file not found)
+      res.status(404).send('File not found');
+    }
+  });
+
+
+  // try{
+  //   if(metas){
+  //     res.status(200).json({status:200, message:"Fetched Successfully", metas:metas})
+  //   }else{
+  //     res.status(200).json({status:200, message:"No metadata for this user", metas:metas})
+  //   }
+  // }catch(err){
+  //   res.status(404).json({status:404, message:"Something went wrong", error:err})
+  // }
+
+  // console.log(metas)
+})
+
 router.post('/extract', authenticateToken, upload.single('file'), metaDataController.createMetaData);
 
 

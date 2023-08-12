@@ -4,7 +4,7 @@ const path=require('path');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname,'./uploads/'))
+    cb(null, path.join(__dirname,'../public/upload/'))
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
@@ -16,7 +16,6 @@ const upload = multer({ storage: storage }).single('file');
 
 module.exports.uploadFile=(req,res,next)=>{
 try {
-    console.log(req.body)
       upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
         return res.status(400).send({message:"Error: "+err,status:400})

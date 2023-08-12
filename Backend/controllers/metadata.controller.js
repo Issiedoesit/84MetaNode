@@ -22,6 +22,7 @@ module.exports.createMetaData=(req,res,next)=>{
               originalName:req.file.originalname,
               size:req.file.size,
               mime:req.file.type,
+              file:req.file,
               information:result.data[0]
               });
           metadata=await metadata.save();
@@ -31,10 +32,10 @@ module.exports.createMetaData=(req,res,next)=>{
     .then(()=>{
 
         // delete the file from the uploads folder to save space
-        if (fs.existsSync (PHOTO_PATH)) { 
-            // console.log('Exists'); 
-            fs.unlinkSync (PHOTO_PATH) 
-        }
+        // if (fs.existsSync (PHOTO_PATH)) { 
+        //     // console.log('Exists'); 
+        //     fs.unlinkSync (PHOTO_PATH) 
+        // }
     })
     .catch(console.error);
 

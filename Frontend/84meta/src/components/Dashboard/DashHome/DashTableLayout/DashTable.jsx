@@ -4,7 +4,7 @@ import axios from "axios"
 import useSWR from "swr"
 import formatDate from "../../../../utils/FormatDate"
 import DashTableSkeleton from './DashTableSkeleton'
-const DashTable = ({data:metadata, error, mutate}) => {
+const DashTable = ({data:metadata, error, mutate, submitting, setSubmitting, openAlert, setOpenAlert, alertValues, setAlertValues}) => {
 
 
     // metadata && console.log("Metadata => ", metadata)
@@ -20,11 +20,12 @@ const DashTable = ({data:metadata, error, mutate}) => {
                     <td className={`px-4 py-4`}>Date Created</td>
                     <td className={`px-4 py-4`}>Status</td>
                     <td className={`px-4 py-4`}></td>
+                    <td className={`px-4 py-4`}></td>
                 </tr>
             </thead>
             <tbody>
                 {metadata && metadata.data.metas.length > 0 && metadata.data.metas.map((data, idx)=>{
-                    return <DashRow key={idx} index={idx} rowData={metadata.data.metas[idx]} id={data.id} name={data.originalName} size={data.size} folder={data.folder} date={formatDate(data.metadataCreatedAt)} status={data.status} />
+                    return <DashRow key={idx} index={idx} mutate={mutate} rowData={metadata.data.metas[idx]} id={data._id} name={data.originalName} size={data.size} folder={data.folder} date={formatDate(data.metadataCreatedAt)} status={data.status} submitting={submitting} setSubmitting={setSubmitting} openAlert={openAlert} setOpenAlert={setOpenAlert} alertValues={alertValues} setAlertValues={setAlertValues} />
                 })}
             </tbody>
         </table> 
