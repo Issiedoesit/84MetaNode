@@ -16,6 +16,10 @@ const DashHome = () => {
 
   const [submitting, setSubmitting] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [maxSize, setMaxSize] = useState({
+    state:false,
+    message:"Max size exceeded (5mb)"
+  })
 
   const [openAlert, setOpenAlert] = useState(false)
   const [alertValues, setAlertValues] = useState({
@@ -52,6 +56,17 @@ const DashHome = () => {
     
     setUploading(true)
     setOpenAlert(false)
+    setMaxSize({...maxSize, state:false})
+
+    if(fileInput.size >= 5242880){
+      setMaxSize({...maxSize, state:true})
+      setUploading(false)
+      setTimeout(() => {
+        setMaxSize({...maxSize, state:false})
+        setFileInput(null)
+      }, 1000);
+      return null
+    }
 
     try {
         axios.post(`${import.meta.env.VITE_BASEURL}metadata/extract`, formData, {headers:{Authorization: `Bearer ${token}`}})
@@ -156,6 +171,9 @@ const DashHome = () => {
           }
         </div>
         }
+        {fileInput && maxSize.state == true && <div className={`text-orange-600 py-4 text-xs`}>
+          *** {maxSize.message}
+          </div>}
 
         <div className="grid w-full">
         <DashTable data={data} error={error} mutate={mutate} submitting={submitting} setSubmitting={setSubmitting} openAlert={openAlert} setOpenAlert={setOpenAlert} alertValues={alertValues} setAlertValues={setAlertValues} />
